@@ -54,7 +54,6 @@ security = HTTPBasic()
 
 PROXY_API_URL = None  # Initialize it to None
 
-
 async def fetch_proxy_api_url():
     """
     Fetch the PROXY_API_URL from the specified endpoint.
@@ -64,7 +63,6 @@ async def fetch_proxy_api_url():
         response = await client.post(PROXY_FETCH_URL, json=data)
         response.raise_for_status()
         return response.json()["response"]["url"]
-
 
 async def ping_server():
     """Function to send a POST request to SERVER_PING_URL every 60 mins."""
@@ -77,8 +75,6 @@ async def ping_server():
             print(f"Exception during ping: {str(e)}")
         
         await asyncio.sleep(3600)  # Wait for 3600 seconds (1 hr) before sending the next ping
-
-
 
 # A function to send requests with the authorization header
 async def fetch_valid_credentials(credentials: HTTPBasicCredentials):
@@ -110,7 +106,6 @@ def create_basic_auth_header(username: str, password: str) -> dict:
     credentials = f"{username}:{password}"
     base64_credentials = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
     return {"Authorization": f"Basic {base64_credentials}"}
-
 
 class UserCredentials:
     def __init__(self, username, password):
@@ -263,6 +258,9 @@ class TrainModelInput(BaseModel):
     full_bf16_training_experimental: bool
     min_timestep: float
     max_timestep: float
+    class Config:
+        protected_namespaces = ()
+
 class Txt2ImgRequest(BaseModel):
 
     enable_hr: bool
